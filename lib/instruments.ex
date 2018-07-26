@@ -251,6 +251,10 @@ defmodule Instruments do
       keys: ~w(weighted total)a,
       report_interval: report_interval)
 
+
+    Probe.define!("erlang.io", :counter, module: Probes.IO,
+      keys: ~w(input output)a,
+      report_interval: report_interval)
     :ok
   end
 
