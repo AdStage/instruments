@@ -18,14 +18,14 @@ defmodule Instruments.Probes.IO do
 
   @doc false
   def probe_init(_name, _type, _options) do
-    {{:input, input}, {:output, output}} = :erlang.statistics(:io)
-    {:ok, {input, output}}
+    {:ok, {0, 0}}
   end
 
   @doc false
-  def probe_get_value({{prev_input, prev_output}, {input, output}}) do
-    delta_input = prev_input - input
-    delta_output = prev_output - output
+  def probe_get_value({prev_input, prev_output}) do
+    {{:input, input}, {:output, output}} = :erlang.statistics(:io)
+    delta_input = input - prev_input
+    delta_output = output - prev_output
     Process.send(self(), {:previous, {input, output}}, [])
     {:ok, [input: delta_input, output: delta_output]}
   end
@@ -34,14 +34,13 @@ defmodule Instruments.Probes.IO do
   def probe_reset(state), do: {:ok, state}
 
   @doc false
-  def probe_sample({previous_values, _}) do
-    {{:input, input}, {:output, output}} = :erlang.statistics(:io)
-    {:ok, {previous_values, {input, output}}}
+  def probe_sample(state) do
+    {:ok, state}
   end
 
   @doc false
-  def probe_handle_msg({:previous, {input, output}}, _state), do: {:ok, {{input, output}, {input, output}}}
-  def probe_handle_msg(_, state), do: {:ok, state}
+  def probe_handle_message({:previous, {input, output}}, _state), do: {:ok, {input, output}}
+  def probe_handle_message(_, state), do: {:ok, state}
 
 
 end
