@@ -251,7 +251,12 @@ defmodule Instruments do
       keys: ~w(weighted total)a,
       report_interval: report_interval)
 
+    # GC usage
+    Probe.define!("erlang.garbage_collection", :counter, module: Probes.GarbageCollection,
+      keys: ~w(number words_reclaimed)a,
+      report_interval: report_interval)
 
+    # IO usage
     Probe.define!("erlang.io", :counter, module: Probes.IO,
       keys: ~w(input output)a,
       report_interval: report_interval)
