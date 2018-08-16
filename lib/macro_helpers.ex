@@ -1,7 +1,7 @@
 defmodule Instruments.MacroHelpers do
   @moduledoc false
 
-  @safe_metric_types [:increment, :decrement, :gauge, :event, :set]
+  #  @safe_metric_types [:increment, :decrement, :gauge, :event, :set]
 
   def build_metric_macro(:measure, caller, metrics_module, key_ast, options_ast, function) do
     key = to_iolist(key_ast, caller)
@@ -66,12 +66,12 @@ defmodule Instruments.MacroHelpers do
   defp parse_iolist(ast, accum),
     do: {ast, accum}
 
-  defp to_safe_options(metric_type, options_ast) when metric_type in @safe_metric_types,
+  defp to_safe_options(metric_type, options_ast),# when metric_type in @safe_metric_types,
     do: options_ast
 
-  defp to_safe_options(_metric_type, options_ast) do
-    quote do
-      Keyword.merge([sample_rate: 0.1], unquote(options_ast))
-    end
-  end
+#  defp to_safe_options(_metric_type, options_ast) do
+#    quote do
+#      Keyword.merge([sample_rate: 0.1], unquote(options_ast))
+#    end
+#  end
 end

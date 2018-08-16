@@ -54,9 +54,7 @@ defmodule Instruments.Probe.Runner do
     end
 
     defp sanitize_reporter_options(options) do
-      [sample_rate: 1.0]
-        |> Keyword.merge(options)
-        |> Keyword.take([:sample_rate, :tags])
+      Keyword.take(options, [:sample_rate, :tags])
     end
   end
 
